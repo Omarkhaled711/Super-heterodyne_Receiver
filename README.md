@@ -56,12 +56,3 @@ Before running the code, ensure that you have MATLAB installed on your system. T
 
 6. **Mixing Signals:** Modulating signals are mixed with their respective carrier signals by multiplication.
 7. **Plotting AM Signals:** AM signals are plotted in separate figures.
-
-### Function Description
-
-The `plot_spectrum` function is responsible for plotting the spectrum of a given signal and calculating relevant information such as peaks, bandwidth, and BW. It returns these calculated values for further use.
-
-```matlab
-function [peaks, bandwidth, BW] = plot_spectrum(k, FS, spectrum_L, signal_spectrum, title_str)
-    % ... (function code)
-end
