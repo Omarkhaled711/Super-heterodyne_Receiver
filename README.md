@@ -56,3 +56,13 @@ Before running the code, ensure that you have MATLAB installed on your system. T
 
 6. **Mixing Signals:** Modulating signals are mixed with their respective carrier signals by multiplication.
 7. **Plotting AM Signals:** AM signals are plotted in separate figures.
+
+8. **Function: apply_bandpass_filter:** The `apply_bandpass_filter` function designs and applies a band-pass filter using the fdesign approach. It ensures that only the desired frequency components pass through, mimicking the role of a super-heterodyne receiver.
+
+   ```matlab
+   function received_signal = apply_bandpass_filter(input_signal, Fc, Fs_filter, BW)
+       % ... (function code)
+   end
+   ```
+
+   This function is essential for simulating the super-heterodyne receiver and filtering out unwanted frequencies, resulting in a clearer received signal.

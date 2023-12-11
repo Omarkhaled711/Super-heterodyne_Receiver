@@ -42,6 +42,16 @@ for i = 1:length(modulating_signals)
     title(['AM Signal ', num2str(i)]);
     xlabel('Time');
     ylabel('Amplitude');
+
+    %% Design and apply band-pass filter using fdesign
+    received_signal = apply_bandpass_filter(AM_signal, Fc, 10 * FS, BW);
+    %% Create a new figure for each received signal
+    figure;
+    %% Plotting received signal after band-pass filtering
+    plot(t, received_signal);
+    title(['Received Signal after Band-Pass Filtering - Signal ', num2str(i)]);
+    xlabel('Time');
+    ylabel('Amplitude');    
 end
    
 %% Function: plot_spectrum
@@ -62,4 +72,30 @@ function [peaks, bandwidth, BW] = plot_spectrum(k, FS, spectrum_L, signal_spectr
     xlabel('Frequency (Hz)');
     ylabel('Magnitude');
     fprintf('%s Bandwidth: %.2f Hz\n', title_str, BW);
+end
+
+%% Function: apply_bandpass_filter
+%% Description:
+    % This function applies a band-pass filter to the input signal using
+    % the fdesign approach. It designs a band-pass filter with the
+    % specified center frequency (Fc), upsampled frequency (Fs_filter), and
+    % bandwidth (BW), and then applies the filter to the input signal.
+%% Return:
+    % - received_signal: The filtered signal after applying the band-pass filter.
+
+function received_signal = apply_bandpass_filter(input_signal, Fc, Fs_filter, BW)
+    % Design the band-pass filter using fdesign
+    filter_order = 100;  % Adjust as needed
+
+    % Create the filter design object
+    fd = fdesign.bandpass('N,Fc1,Fc2', filter_order, Fc - BW/2, Fc + BW/2, Fs_filter);
+    
+    % Design the filter
+    Hd = design(fd, 'fir', 'window', 'hamming');
+    
+    % Visualize the frequency response
+    fvtool(Hd, 'Color', 'White');
+
+    % Apply the filter to the input signal
+    received_signal = filter(Hd, input_signal);
 end
