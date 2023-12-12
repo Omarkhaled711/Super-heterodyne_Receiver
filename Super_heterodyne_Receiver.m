@@ -52,6 +52,17 @@ for i = 1:length(modulating_signals)
     title(['Received Signal after Band-Pass Filtering - Signal ', num2str(i)]);
     xlabel('Time');
     ylabel('Amplitude');    
+    
+    %%Generate the IF stage carrier
+    IF = 27500;
+    Flo = Fc + IF;  
+    IF_stage_carrier = cos(2 * pi * Flo * t);
+    
+    %% Mixing the received signal with the IF carrier by multiplying them
+    IF_signal = received_signal .* IF_stage_carrier';
+    
+    %% Design and apply IF band-pass filter using fdesign
+    filtered_IF_signal = apply_bandpass_filter(IF_signal, IF, 10 * FS, BW);
 end
    
 %% Function: plot_spectrum
