@@ -21,6 +21,7 @@ for i = 1:length(modulating_signals)
     k = -spectrum_L/2:spectrum_L/2-1;
 
     [peaks, bandwidth, BW] = plot_spectrum(k, FS, spectrum_L, signal_spectrum, ['Signal ', num2str(i), ' Spectrum']);
+    fprintf('%s Bandwidth: %.2f Hz\n', ['Signal ', num2str(i), ' Spectrum'], BW);
     %% Increasing the sampling frequency by increasing the no. of samples to
     %% conform the Nyquist criteria for the carrier signals.
     Upsampled_signal = interp(single_channel, 10);
@@ -63,6 +64,37 @@ for i = 1:length(modulating_signals)
     
     %% Design and apply IF band-pass filter using fdesign
     filtered_IF_signal = apply_bandpass_filter(IF_signal, IF, 10 * FS, BW);
+
+    %% Generate LO signal
+    LO_signal = cos(2 * pi * IF * t);
+
+    %% Mixing the filtered IF signal with the LO signal
+    baseband_signal = filtered_IF_signal .* LO_signal';
+
+    %% Apply low-pass filter
+    baseband_signal_filtered = apply_lowpass_filter(baseband_signal, BW, 10 * FS);
+    %% Create a new figure for the baseband signal
+    figure;
+    %% Plotting baseband signal
+    plot(t, baseband_signal_filtered);
+    title(['Baseband Signal - Signal ', num2str(i)]);
+    xlabel('Time');
+    ylabel('Amplitude');
+    
+    % Calculate and plot the filtered signal spectrum
+    filtered_spectrum = fft(baseband_signal_filtered);
+    filtered_spectrum_L = length(filtered_spectrum);
+    filtered_k = -filtered_spectrum_L/2 : filtered_spectrum_L/2 - 1;
+    
+    [~, ~, ~] = plot_spectrum(filtered_k, FS, filtered_spectrum_L, filtered_spectrum, ['Filtered Signal Spectrum ', num2str(i)]);
+    
+    %% Export the audio
+    gain_factor = 8;
+    output_filename = ['Received_Signal_', num2str(i), '.wav'];
+    normalized_signal = normalize(gain_factor * baseband_signal_filtered, 'range', [-1, 1]);
+    % Write the normalized signal to the audio file
+    audiowrite(output_filename, normalized_signal, 10 * FS);
+
 end
    
 %% Function: plot_spectrum
@@ -82,7 +114,6 @@ function [peaks, bandwidth, BW] = plot_spectrum(k, FS, spectrum_L, signal_spectr
     title(title_str);
     xlabel('Frequency (Hz)');
     ylabel('Magnitude');
-    fprintf('%s Bandwidth: %.2f Hz\n', title_str, BW);
 end
 
 %% Function: apply_bandpass_filter
@@ -109,4 +140,29 @@ function received_signal = apply_bandpass_filter(input_signal, Fc, Fs_filter, BW
 
     % Apply the filter to the input signal
     received_signal = filter(Hd, input_signal);
+end
+
+%% Function: apply_lowpass_filter
+%% Description:
+    % This function applies a low-pass filter to the input signal using
+    % the fdesign approach.
+%% Return:
+    % - filtered_signal: The filtered signal after applying the low-pass filter.
+function filtered_signal = apply_lowpass_filter(input_signal,BW, Fs)
+    % Design the low-pass filter using fdesign
+    LPF_cutoff_factor = 0.5;
+    cutoff_frequency = BW * LPF_cutoff_factor;
+    passband_ripple = 0.5;
+    stopband_attenuation = 60;  
+    % Create the filter design object
+    fd = fdesign.lowpass('Fp,Fst,Ap,Ast', cutoff_frequency, cutoff_frequency*1.2, passband_ripple, stopband_attenuation, Fs);
+    
+    % Design the filter
+    Hd = design(fd, 'fir', 'window', 'hamming');
+    
+    % Visualize the frequency response
+    fvtool(Hd, 'Color', 'White');
+
+    % Apply the filter to the input signal
+    filtered_signal = filter(Hd, input_signal);
 end
