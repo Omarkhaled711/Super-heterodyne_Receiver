@@ -3,66 +3,102 @@
 simulateing an AM modulator and a corresponding super-heterodyne receiver using radio-station generated signals.
 ![System Diagram](/images/system.png)
 
-## Modulating Signal Analysis
+## Introduction
 
-This directory contains MATLAB code for analyzing modulating signals, including reading audio files, calculating signal spectra, generating carrier signals, and mixing them to produce Amplitude Modulated (AM) signals.
+This MATLAB code demonstrates the amplitude modulation (AM) signal processing pipeline for a set of modulating signals. The code processes both "Short_BBCArabic2.wav" and "Short_FM9090.wav" signals, providing insights into the various stages of AM signal generation, filtering, and analysis.
 
-### Prerequisites
+## Code Structure
 
-Before running the code, ensure that you have MATLAB installed on your system. The code utilizes the built-in functions provided by MATLAB for signal processing.
+The code is structured into several sections, each serving a specific purpose in the AM signal processing pipeline. The main sections include:
 
-### Usage
+- Modulating Signals:
+      - The code begins by specifying a list of modulating signals (e.g., "Short_BBCArabic2.wav", "Short_FM9090.wav").
 
-1. **Clear Workspace:** Execute the following commands to clear the MATLAB workspace and close any open figures.
+- Signal Processing Loop:
+      - A loop iterates through each modulating signal, processing and analyzing it individually.
 
-    ```matlab
-    clear all;
-    close all;
-    ```
+- Signal Analysis:
+      - The modulating signals are read and transformed into single-channel streams.
+      - The frequency spectrum of each modulating signal is analyzed to determine its baseband bandwidth.
 
-2. **Read Modulating Signals:** Define a list of modulating signals (audio files) in the `modulating_signals` array. The code will loop through each signal for analysis.
+- Carrier Signal Generation:
+      - A carrier signal is generated based on the modulating signal's characteristics.
+      - The modulating signal is mixed with the carrier signal to produce the AM signal.
 
-    ```matlab
-    modulating_signals = {"Short_BBCArabic2.wav", "Short_FM9090.wav", %...etc};
-    ```
+- Band-Pass Filtering:
+      - The AM signals are passed through band-pass filters to isolate the desired frequency range.
+      - The filtered signals are then analyzed and visualized.
 
-3. **Loop Through Modulating Signals:** The code iterates through each modulating signal, performs signal analysis, and generates AM signals.
+- Intermediate Frequency (IF) Stage:
+      - An IF carrier is generated, and the filtered signals are mixed with the IF carrier.
+      - The resulting signals undergo IF band-pass filtering.
 
-    ```matlab
-    for i = 1:length(modulating_signals)
-        % ... (code within the loop)
-    end
-    ```
+- Baseband detection Stage:
+      - An signal with frequency equal to $\omega_{IF}$ is generated, and the filtered IF signals are mixed with this signal.
+      - The final baseband signals are obtained.
 
-4. **Function: plot_spectrum:** The function `plot_spectrum` is defined to plot the spectrum of a given signal and calculate relevant information such as peaks, bandwidth, and BW. The function returns these calculated values.
+- Low-Pass Filtering:
+      - The baseband signals undergo low-pass filtering to remove high-frequency components.
 
-    ```matlab
-    function [peaks, bandwidth, BW] = plot_spectrum(k, FS, spectrum_L, signal_spectrum, title_str)
-        % ... (function code)
-    end
-    ```
+- Spectrum Analysis:
+      - The original and filtered signal spectra are analyzed and plotted for comparison.
 
-### Signal Analysis Process
+- Audio Export:
+      - The processed baseband signals are exported as audio files (found in received directory).
 
-1. **Reading Modulating Signals:** Audio files are read, and their sampling frequency is obtained.
+## Results for "Short_BBCArabic2.wav" and "Short_FM9090.wav"
 
-2. **Converting to Single Channel:** Two-channel stereo signals are converted to a single channel stream by adding the two channels.
+For both signals -Short_BBCArabic2.wav represents signal 1, and Short_FM9090.wav represents signal 2- the following results and plots are generated:
 
-3. **Increasing Sampling Frequency:** Sampling frequency is increased by interpolating the signal to conform to the Nyquist criteria for carrier signals.
+- AM Signals:
+Time-domain plots of the AM signals are displayed, illustrating their amplitude variations:
+  - AM Signal 1
+      ![System Diagram](/images/AM_Signal_1.png)
+  - AM Signal 2
+      ![System Diagram](/images/AM_Signal_2.png)
 
-4. **Calculating Spectrum:** FFT is applied to the modulating signal to obtain its baseband bandwidth. The spectrum is then plotted.
+- Received Signals after Band-Pass Filtering:
+Time-domain plots of the received signals after band-pass filtering are shown.
+  - Received Signal after BandPass 1:
+        ![System Diagram](/images/Received_Signal_after_BandPass_1.png)
+  - Received Signal after BandPass 2
+        ![System Diagram](/images/Received_Signal_after_BandPass_2.png)
+- Baseband Signals:
+Time-domain plots of the baseband signals are presented.
+  - Baseband Signal 1
+        ![System Diagram](/images/Baseband_Signal_1.png)
+  - Baseband Signal 2
+        ![System Diagram](/images/Baseband_Signal_2.png)  
+- Original Vs Demodulated and Filtered received Signal Spectra:
+Spectra of the original and filtered baseband signals are compared.
+  - Original Signal Spectrum 1
+        ![System Diagram](/images/Signal_1_Spectrum.png)
+  - Original Signal Spectrum 2
+        ![System Diagram](/images/Signal_2_Spectrum.png)
+  - Filtered Signal Spectrum 1
+        ![System Diagram](/images/Filtered_Signal_Spectrum_1.png)
+  - Filtered Signal Spectrum 2
+        ![System Diagram](/images/Filtered_Signal_Spectrum_2.png)
+- Band-Pass Filter Visualizations:
+Frequency response visualizations of the band-pass filters are provided.
+  - Bandpass Signal 1 Center Fc Filter Visualization
+        ![System Diagram](/images/Bandpass_signal1_center_Fc_filter_visulaization.png)
+  - Bandpass Signal 1 Center IF Filter Visualization
+        ![System Diagram](/images/Bandpass_signal1_center_If_filter_visulaization.png)
+  - Bandpass Signal 2 Center Fc Filter Visualization
+        ![System Diagram](/images/Bandpass_signal2_center_Fc_filter_visualization.png)
+  - Bandpass Signal 2 Center IF Filter Visualization
+        ![System Diagram](/images/Bandpass_signal2_center_IF_filter_visualization.png)
+- Low-Pass Filter Visualizations:
+Frequency response visualizations of the low-pass filters are provided.
+  - LPF Signal 1 Filter Visualization
+        ![System Diagram](/images/LPF_signal1_filter_visualization.png)
+  - LPF Signal 2 Filter Visualization
+        ![System Diagram](/images/LPF_signal2_filter_visualization.png)
 
-5. **Generating Carrier Signals:** Carrier signals are generated for each modulating signal with varying frequencies.
+## Instructions for Use
 
-6. **Mixing Signals:** Modulating signals are mixed with their respective carrier signals by multiplication.
-7. **Plotting AM Signals:** AM signals are plotted in separate figures.
+To use this code for other modulating signals:
 
-8. **Function: apply_bandpass_filter:** The `apply_bandpass_filter` function designs and applies a band-pass filter using the fdesign approach. It ensures that only the desired frequency components pass through, mimicking the role of a super-heterodyne receiver.
-
-   ```matlab
-   function received_signal = apply_bandpass_filter(input_signal, Fc, Fs_filter, BW)
-       % ... (function code)
-   end
-   ```
-
-   This function is essential for simulating the super-heterodyne receiver and filtering out unwanted frequencies, resulting in a clearer received signal.
+    Update the modulating_signals list with the desired signal filenames.
+    Adjust parameters such as filter orders, frequencies, and gains as needed.
