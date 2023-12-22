@@ -11,94 +11,132 @@ This MATLAB code demonstrates the amplitude modulation (AM) signal processing pi
 
 The code is structured into several sections, each serving a specific purpose in the AM signal processing pipeline. The main sections include:
 
-- Modulating Signals:
-      - The code begins by specifying a list of modulating signals (e.g., "Short_BBCArabic2.wav", "Short_FM9090.wav").
+- Modulating Signal Processing:
+  - Read two modulating signals: "Short_BBCArabic2.wav" and "Short_FM9090.wav."
+  - Convert stereo signals to single-channel streams.
+  - Compute the FFT of each modulating signal to determine the baseband bandwidth.
+  - Upsample each signal and generate carrier signals.
+  - Mix modulating signals with carrier signals to produce amplitude-modulated (AM) signals.
 
-- Signal Processing Loop:
-      - A loop iterates through each modulating signal, processing and analyzing it individually.
+- Transmission
+  - Combine the two AM signals.
+  - Apply band-pass filtering to simulate transmission over a radio frequency (RF) channel.
 
-- Signal Analysis:
-      - The modulating signals are read and transformed into single-channel streams.
-      - The frequency spectrum of each modulating signal is analyzed to determine its baseband bandwidth.
-
-- Carrier Signal Generation:
-      - A carrier signal is generated based on the modulating signal's characteristics.
-      - The modulating signal is mixed with the carrier signal to produce the AM signal.
-
-- Band-Pass Filtering:
-      - The AM signals are passed through band-pass filters to isolate the desired frequency range.
-      - The filtered signals are then analyzed and visualized.
-
-- Intermediate Frequency (IF) Stage:
-      - An IF carrier is generated, and the filtered signals are mixed with the IF carrier.
-      - The resulting signals undergo IF band-pass filtering.
-
-- Baseband detection Stage:
-      - An signal with frequency equal to $\omega_{IF}$ is generated, and the filtered IF signals are mixed with this signal.
-      - The final baseband signals are obtained.
-
-- Low-Pass Filtering:
-      - The baseband signals undergo low-pass filtering to remove high-frequency components.
-
-- Spectrum Analysis:
-      - The original and filtered signal spectra are analyzed and plotted for comparison.
+- Reception
+  - Generate an intermediate frequency (IF) stage carrier.
+  - Mix the received signal with the IF carrier.
+  - Apply band-pass filtering to isolate the IF signal.
+  - Mix the IF signal with a suitable carrier signal to obtain the baseband signal.
+  - Apply low-pass filtering to the baseband signal.
 
 - Audio Export:
-      - The processed baseband signals are exported as audio files (found in received directory).
+  - The processed baseband signals are exported as audio files (found in received directory).
 
-## Results for "Short_BBCArabic2.wav" and "Short_FM9090.wav"
+## Results and Plots
 
 For both signals -Short_BBCArabic2.wav represents signal 1, and Short_FM9090.wav represents signal 2- the following results and plots are generated:
 
-- AM Signals:
-Time-domain plots of the AM signals are displayed, illustrating their amplitude variations:
-  - AM Signal 1
-      ![System Diagram](/images/AM_Signal_1.png)
-  - AM Signal 2
-      ![System Diagram](/images/AM_Signal_2.png)
+- Modulating Signal Analysis
 
-- Received Signals after Band-Pass Filtering:
-Time-domain plots of the received signals after band-pass filtering are shown.
-  - Received Signal after BandPass 1:
-        ![System Diagram](/images/Received_Signal_after_BandPass_1.png)
-  - Received Signal after BandPass 2
-        ![System Diagram](/images/Received_Signal_after_BandPass_2.png)
-- Baseband Signals:
-Time-domain plots of the baseband signals are presented.
-  - Baseband Signal 1
-        ![System Diagram](/images/Baseband_Signal_1.png)
-  - Baseband Signal 2
-        ![System Diagram](/images/Baseband_Signal_2.png)  
-- Original Vs Demodulated and Filtered received Signal Spectra:
-Spectra of the original and filtered baseband signals are compared.
-  - Original Signal Spectrum 1
-        ![System Diagram](/images/Signal_1_Spectrum.png)
-  - Original Signal Spectrum 2
-        ![System Diagram](/images/Signal_2_Spectrum.png)
-  - Filtered Signal Spectrum 1
-        ![System Diagram](/images/Filtered_Signal_Spectrum_1.png)
-  - Filtered Signal Spectrum 2
-        ![System Diagram](/images/Filtered_Signal_Spectrum_2.png)
-- Band-Pass Filter Visualizations:
-Frequency response visualizations of the band-pass filters are provided.
-  - Bandpass Signal 1 Center Fc Filter Visualization
-        ![System Diagram](/images/Bandpass_signal1_center_Fc_filter_visulaization.png)
-  - Bandpass Signal 1 Center IF Filter Visualization
-        ![System Diagram](/images/Bandpass_signal1_center_If_filter_visulaization.png)
-  - Bandpass Signal 2 Center Fc Filter Visualization
-        ![System Diagram](/images/Bandpass_signal2_center_Fc_filter_visualization.png)
-  - Bandpass Signal 2 Center IF Filter Visualization
-        ![System Diagram](/images/Bandpass_signal2_center_IF_filter_visualization.png)
-- Low-Pass Filter Visualizations:
-Frequency response visualizations of the low-pass filters are provided.
-  - LPF Signal 1 Filter Visualization
-        ![System Diagram](/images/LPF_signal1_filter_visualization.png)
-  - LPF Signal 2 Filter Visualization
-        ![System Diagram](/images/LPF_signal2_filter_visualization.png)
+  - Frequency spectrum of the first modulating signal
+  
+      <img src="images/Signal 1 Spectrum.png" width="450">
+
+  - Frequency spectrum of the second modulating signal
+
+      <img src="images/Signal 2 Spectrum.png" width="450">
+
+- Amplitude Modulation (AM) Signal Analysis:
+  - Time-domain plot of the first amplitude-modulated (AM) signal.
+
+      <img src="images/AM_Signal_1.png" width="450">
+
+  - Time-domain plot of the second amplitude-modulated (AM) signal.
+
+      <img src="images/AM_Signal_2.png" width="450">
+
+  - Frequency spectrum of the first AM signal
+
+      <img src="images/AM Signal spectrum - Signal  1.png" width="450">
+
+  - Frequency spectrum of the second AM signal
+
+      <img src="images/AM Signal spectrum - Signal  2.png" width="450">
+
+- Transmitted Signal:
+  - Frequency spectrum plot of the combined transmitted signal after AM modulation.
+
+      <img src="images/transmitted Signal.png" width="450">
+
+- RF Stage Signal Analysis
+
+  - Frequency spectrum of the received RF signal after band-pass filtering for the first signal.
+
+      <img src="images/Received RF Signal spectrum after Band-Pass Filtering - Signal  1.png" width="450">
+
+  - Visualization of the band-pass filter frequency for the first signal.
+
+      <img src="images/BPF_Fc_signal1_visualization.png" width="450">
+
+  - Frequency spectrum of the received RF signal after band-pass filtering for the second signal.
+
+      <img src="images/Received RF Signal spectrum after Band-Pass Filtering - Signal  2.png" width="450">
+
+  - Visualization of the band-pass filter frequency for the first signal.
+
+      <img src="images/BPF_Fc_signal2_visualization.png" width="450">
+
+- IF Stage Signal Analysis
+
+  - Frequency spectrum of the intermediate frequency (IF) signal for the first signal.
+
+      <img src="images/IF Signal Spectrum 1.png" width="450">
+
+  - Frequency spectrum of the IF signal for the second signal.
+
+      <img src="images/IF Signal Spectrum 2.png" width="450">
+
+  - Visualization of the band-pass filter frequency response for the IF signals
+
+      <img src="images/BPF_IF_signal2_visualization.png" width="450">
+
+  - Frequency spectrum of the filtered IF signal for the first signal.
+
+      <img src="images/filtered IF Signal Spectrum 1.png" width="450">
+
+  - Frequency spectrum of the filtered IF signal for the second signal.
+
+      <img src="images/filtered IF Signal Spectrum 2.png" width="450">
+
+- Baseband Signal Analysis
+
+  - Time-domain plot of the baseband signal for the first signal.
+
+      <img src="images/Baseband_Signal_ 1.png" width="450">
+
+  - Time-domain plot of the baseband signal for the second signal.
+
+      <img src="images/Baseband_Signal_ 2.png" width="450">
+
+  - Frequency spectrum of the filtered baseband signal for the first signal.
+
+      <img src="images/Filtered Signal Spectrum 1.png" width="450">
+
+  - Visualization of the low-pass filter frequency response for the first signal.
+
+      <img src="images/LPF_signal1_visualization.png" width="450">
+
+  - Frequency spectrum of the filtered baseband signal for the second signal.
+
+      <img src="images/Filtered Signal Spectrum 2.png" width="450">
+
+  - Visualization of the low-pass filter frequency response for the second signal.
+
+      <img src="images/LPF_signal2_visualization.png" width="450">
 
 ## Instructions for Use
 
 To use this code for other modulating signals:
 
-    Update the modulating_signals list with the desired signal filenames.
-    Adjust parameters such as filter orders, frequencies, and gains as needed.
+- Update the modulating_signals list with the desired signal filenames.
+- Adjust parameters such as filter orders, frequencies, and gains as needed.
